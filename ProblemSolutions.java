@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Evan Bowser / 002
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -64,12 +64,22 @@ public class ProblemSolutions {
      */
 
   public static int lastBoulder(int[] boulders) {
-
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
-  }
+    if (boulders == null || boulders.length == 0) return -1;
+    
+    int[] copy = Arrays.copyOf(boulders, boulders.length);
+    
+    while (copy.length > 1) {
+        Arrays.sort(copy);
+        
+        int[] reduced = new int[copy.length - 1];
+        System.arraycopy(copy, 0, reduced, 0, copy.length - 2);
+        reduced[copy.length - 2] = copy[copy.length - 1] - copy[copy.length - 2];
+        
+        copy = reduced;
+    }
+    
+    return copy.length == 0 ? -1 : copy[0];
+}
 
 
     /**
@@ -90,13 +100,23 @@ public class ProblemSolutions {
      */
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
-
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
-
+    // Track unique strings and their duplicate status
+    Set<String> uniqueStrings = new HashSet<>();
+    Set<String> duplicateStrings = new HashSet<>();
+    
+    // Identify duplicates in a single pass
+    for (String s : input) {
+        if (!uniqueStrings.add(s)) {
+            duplicateStrings.add(s);
+        }
     }
+    
+    // Convert to sorted ArrayList
+    ArrayList<String> result = new ArrayList<>(duplicateStrings);
+    Collections.sort(result);
+    
+    return result;
+}
 
 
     /**
@@ -130,10 +150,31 @@ public class ProblemSolutions {
      */
 
     public static ArrayList<String> pair(int[] input, int k) {
-
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+    // Tracking unique pairs and processed values
+    Set<Integer> processedSet = new HashSet<>();
+    TreeSet<String> uniquePairs = new TreeSet<>();
+    
+    // Iterate through input array
+    for (int currentNum : input) {
+        // Calculate the complementary value needed to reach k
+        int complement = k - currentNum;
+        
+        // Check if complement exists in processed values
+        if (processedSet.contains(complement)) {
+            // Create pair ensuring consistent order
+            String formattedPair = String.format("(%d, %d)", 
+                Math.min(currentNum, complement), 
+                Math.max(currentNum, complement));
+            
+            // Add unique pair to collection
+            uniquePairs.add(formattedPair);
+        }
+        
+        // Mark current number as processed
+        processedSet.add(currentNum);
     }
+    
+    // Convert TreeSet to ArrayList to match original return type
+    return new ArrayList<>(uniquePairs);
+}
 }
