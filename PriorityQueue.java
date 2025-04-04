@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Evan Bowser / 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -149,11 +149,25 @@ class PriorityQueue<E, P> {
      *                        newly inserted element
      */
 
-    public Node add(E e, P priority) {
-
-        // YOUR CODE GOES HERE
-        return null;
-    }
+    public Node insertElement(E element, P priorityValue) {
+    // Get position for insertion
+    int positionForInsertion = heapStructure.size();
+    
+    // Create new node with given element and priority
+    Node elementToAdd = new Node(element, priorityValue, positionForInsertion);
+    
+    // Add to structure at the calculated position
+    heapStructure.add(positionForInsertion, elementToAdd);
+    
+    // Maintain heap property by moving element up as needed
+    heapifyUp(positionForInsertion);
+    
+    /* 
+     * Return reference to newly created node
+     * allowing caller to track inserted element
+     */
+    return elementToAdd;
+}
 
 
     /**
@@ -167,10 +181,25 @@ class PriorityQueue<E, P> {
      */
 
     public boolean contains(E e) {
-
-        // ADD YOUR CODE HERE
-        return false;
+    // Immediately return false for null input to prevent null pointer exceptions
+    if (e == null) return false;
+    
+    // Initialize index and result tracking variable
+    int index = 0;
+    boolean containsElement = false;
+    
+    // Traverse the tree while the element hasn't been found and we haven't reached the end
+    while (index < tree.size() && !containsElement) {
+        // Check if the current element matches the target
+        containsElement = tree.get(index).value().equals(e);
+        
+        // Move to the next index
+        index++;
     }
+    
+    // Return the final result of the search
+    return containsElement;
+}
 
 
     /**
